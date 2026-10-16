@@ -1,12 +1,20 @@
 package edu.rentcar.reservation;
 
+import edu.rentcar.model.Customer;
 import edu.rentcar.model.RentalRequest;
 import edu.rentcar.model.Reservation;
+import edu.rentcar.model.Vehicle;
+import edu.rentcar.model.factory.AllRiskModeFactory;
+import edu.rentcar.model.factory.BasicModeFactory;
+import edu.rentcar.model.factory.PremiumModeFactory;
+import edu.rentcar.model.factory.RentalModeFactory;
 import edu.rentcar.payment.PaymentGateway;
 import edu.rentcar.payment.PaymentRequest;
 import edu.rentcar.payment.PaymentResult;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /** Coordina la validación, disponibilidad, tarifa, pago y registro de la reservación. */
@@ -67,6 +75,31 @@ public final class ReservationWorkflowFacade {
         );
         reservationRepository.save(reservation);
         return new ReservationWorkflowResult(reservation, total, paymentResult);
+    }
+
+    /** Construye la solicitud desde los valores seleccionados en la interfaz. */
+    public ReservationWorkflowResult createReservation(
+            Customer customer,
+            Vehicle vehicle,
+            LocalDate startDate,
+            LocalDate endDate,
+            String mode,
+            List<String> services,
+            String paymentToken
+    ) {
+        RentalModeFactory modeFactory = switch (mode != null ? mode : "") {
+            case "Premium" -> new PremiumModeFactory();
+            case "All Risk" -> new AllRiskModeFactory();
+            default -> new BasicModeFactory();
+        };
+
+        RentalRequest request = new RentalRequest.Builder()
+                .customer(customer)
+                .vehicle(vehicle)
+                .dates(startDate, endDate)
+                .rentalModeFactory(modeFactory)
+                .build();
+        return createReservation(request, paymentToken);
     }
 
     private void validate(RentalRequest request, String paymentToken) {

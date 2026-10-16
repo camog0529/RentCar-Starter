@@ -1,6 +1,8 @@
 package edu.rentcar.model;
 
-public class Vehicle {
+import edu.rentcar.model.decorator.Rentable;
+
+public class Vehicle implements Rentable {
     private final String id;
     private final String brand;
     private final String model;
@@ -54,5 +56,10 @@ public class Vehicle {
 
     public String getDisplayName() {
         return brand + " " + model;
+    }
+
+    @Override
+    public String getDescription(){
+        return getDisplayName() + "(" + getCategory() +")";
     }
 }

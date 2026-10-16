@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.rentcar.model.composite.RentalServiceComponent;
 import edu.rentcar.model.factory.RentalModeFactory; // Importación de la interfaz del patrón Abstract Factory
 
 /**
@@ -26,7 +27,7 @@ public class RentalRequest {
     private final LocalDate startDate;                 // Fecha en la que inicia el alquiler
     private final LocalDate endDate;                   // Fecha en la que finaliza el alquiler
     private final RentalModeFactory rentalModeFactory; // Fábrica abstracta inyectada que define la modalidad (RF-003)
-    private final List<Object> services;               // Colección de servicios adicionales solicitados
+    private final List<RentalServiceComponent> services;// Colección de servicios adicionales solicitados
 
     /**
      * Constructor Privado de la clase.
@@ -84,7 +85,7 @@ public class RentalRequest {
     /**
      * @return La lista de objetos que representan los servicios complementarios agregados a la solicitud.
      */
-    public List<Object> getServices() {
+    public List<RentalServiceComponent> getServices() {
         return services;
     }
 
@@ -104,7 +105,7 @@ public class RentalRequest {
         private LocalDate startDate;
         private LocalDate endDate;
         private RentalModeFactory rentalModeFactory;
-        private List<Object> services = new ArrayList<>();
+        private List<RentalServiceComponent> services = new ArrayList<>();
 
         /**
          * Asigna el cliente a la solicitud en construcción.
@@ -164,7 +165,7 @@ public class RentalRequest {
          * @param service El servicio adicional (ej: GPS, Silla de bebé).
          * @return La misma instancia del Builder (this) para permitir encadenamiento de métodos.
          */
-        public Builder addService(Object service) {
+        public Builder addService(RentalServiceComponent service) {
             this.services.add(service);
             return this;
         }
