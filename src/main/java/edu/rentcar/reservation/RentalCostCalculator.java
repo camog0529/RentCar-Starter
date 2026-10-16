@@ -1,6 +1,7 @@
 package edu.rentcar.reservation;
 
 import edu.rentcar.model.RentalRequest;
+import edu.rentcar.model.composite.RentalServiceComponent;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,8 +24,16 @@ public final class RentalCostCalculator {
         BigDecimal dailyVehicleRate = BigDecimal.valueOf(request.getVehicle().getDailyRate());
         BigDecimal dailyCoverageRate = BigDecimal.valueOf(
                 request.getRentalModeFactory().createInsuranceCoverage().getCoverageCost());
+        //Bloque para calcular la suma del costo diario de los servicios individuales y paquetes//
+        BigDecimal dailyServiceRate = BigDecimal.ZERO;
 
-        return dailyVehicleRate.add(dailyCoverageRate)
+        for (RentalServiceComponent service : request.getServices()){
+            dailyServiceRate = dailyServiceRate.add(service.getCost());
+        }
+
+        return dailyVehicleRate
+                .add(dailyCoverageRate)
+                .add(dailyServiceRate)
                 .multiply(BigDecimal.valueOf(rentalDays))
                 .setScale(2, RoundingMode.HALF_UP);
     }
