@@ -8,13 +8,14 @@ import java.io.IOException;
 
 /** Adapta las solicitudes de pago de RentCar al cliente de la API suministrado. */
 public final class PaymentApiAdapter implements PaymentGateway {
-    private final PaymentApiClient paymentApiClient;
+    private final PaymentApiClientPort paymentApiClient;
 
     public PaymentApiAdapter(String apiBaseUrl) {
-        this(new PaymentApiClient(apiBaseUrl));
+        PaymentApiClient client = new PaymentApiClient(apiBaseUrl);
+        this.paymentApiClient = client::pay;
     }
 
-    public PaymentApiAdapter(PaymentApiClient paymentApiClient) {
+    public PaymentApiAdapter(PaymentApiClientPort paymentApiClient) {
         if (paymentApiClient == null) {
             throw new IllegalArgumentException("No se puede crear el adaptador: el cliente de la API de pagos es nulo.");
         }
