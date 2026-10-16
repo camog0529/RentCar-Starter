@@ -5,7 +5,7 @@ import edu.rentcar.model.Reservation;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Almacenamiento de reservaciones en memoria, según el alcance del parcial. */
+/** Guarda las reservaciones en una lista mientras la aplicación está abierta. */
 public final class InMemoryReservationRepository implements ReservationRepository {
     private final List<Reservation> reservations = new ArrayList<>();
 
@@ -17,7 +17,7 @@ public final class InMemoryReservationRepository implements ReservationRepositor
     @Override
     public void save(Reservation reservation) {
         if (reservation == null) {
-            throw new IllegalArgumentException("Se requiere una reservación.");
+            throw new IllegalArgumentException("No se puede guardar la reservación porque el objeto recibido es nulo.");
         }
         reservations.add(reservation);
     }

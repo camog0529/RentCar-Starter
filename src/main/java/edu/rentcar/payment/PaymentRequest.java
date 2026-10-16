@@ -11,16 +11,16 @@ public record PaymentRequest(
 ) {
     public PaymentRequest {
         if (reservationId == null || reservationId.isBlank()) {
-            throw new IllegalArgumentException("Se requiere el identificador de la reservación.");
+            throw new IllegalArgumentException("La solicitud de pago debe incluir el identificador de la reservación.");
         }
         if (customerId == null || customerId.isBlank()) {
-            throw new IllegalArgumentException("Se requiere el identificador del cliente.");
+            throw new IllegalArgumentException("La solicitud de pago debe incluir el identificador del cliente.");
         }
         if (amount == null || amount.signum() <= 0) {
-            throw new IllegalArgumentException("El valor del pago debe ser mayor que cero.");
+            throw new IllegalArgumentException("El valor del pago debe ser mayor que cero para poder procesarlo.");
         }
         if (paymentToken == null || paymentToken.isBlank()) {
-            throw new IllegalArgumentException("Se requiere el token de pago.");
+            throw new IllegalArgumentException("La solicitud de pago debe incluir el token requerido por la API.");
         }
     }
 

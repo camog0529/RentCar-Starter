@@ -25,7 +25,8 @@ public final class ReservationWorkflowFacade {
     ) {
         if (reservationRepository == null || availabilityService == null
                 || costCalculator == null || paymentGateway == null) {
-            throw new IllegalArgumentException("Los componentes del flujo de reservación son obligatorios.");
+            throw new IllegalArgumentException("No se puede iniciar el flujo: debe proporcionar el repositorio de reservaciones, "
+                    + "el verificador de disponibilidad, la calculadora de costos y la pasarela de pago.");
         }
         this.reservationRepository = reservationRepository;
         this.availabilityService = availabilityService;
@@ -37,7 +38,9 @@ public final class ReservationWorkflowFacade {
     public ReservationWorkflowResult createReservation(RentalRequest request, String paymentToken) {
         validate(request, paymentToken);
         if (!availabilityService.isAvailable(request)) {
-            throw new IllegalStateException("El vehículo seleccionado no está disponible para las fechas solicitadas.");
+            throw new IllegalStateException("No se puede crear la reservación: el vehículo "
+                    + request.getVehicle().getId() + " no está disponible del "
+                    + request.getStartDate() + " al " + request.getEndDate() + ".");
         }
 
         String reservationId = "RES-" + nextReservationNumber.getAndIncrement();
@@ -48,6 +51,10 @@ public final class ReservationWorkflowFacade {
                 total,
                 paymentToken
         ));
+        if (paymentResult == null) {
+            throw new IllegalStateException("La pasarela de pago no devolvió un resultado para la reservación "
+                    + reservationId + ".");
+        }
 
         String status = paymentResult.isApproved() ? "CONFIRMED" : "FAILED";
         Reservation reservation = new Reservation(
@@ -64,18 +71,29 @@ public final class ReservationWorkflowFacade {
 
     private void validate(RentalRequest request, String paymentToken) {
         if (request == null) {
-            throw new IllegalArgumentException("Se requiere la solicitud de alquiler.");
+            throw new IllegalArgumentException("No se puede iniciar la reservación: la solicitud de alquiler es nula.");
         }
-        if (request.getCustomer() == null || request.getVehicle() == null
-                || request.getStartDate() == null || request.getEndDate() == null
-                || request.getRentalModeFactory() == null) {
-            throw new IllegalArgumentException("La solicitud de alquiler está incompleta.");
+        if (request.getCustomer() == null) {
+            throw new IllegalArgumentException("La solicitud de alquiler no tiene un cliente asociado.");
+        }
+        if (request.getVehicle() == null) {
+            throw new IllegalArgumentException("La solicitud de alquiler no tiene un vehículo seleccionado.");
+        }
+        if (request.getStartDate() == null) {
+            throw new IllegalArgumentException("La solicitud de alquiler no tiene una fecha de inicio.");
+        }
+        if (request.getEndDate() == null) {
+            throw new IllegalArgumentException("La solicitud de alquiler no tiene una fecha de finalización.");
+        }
+        if (request.getRentalModeFactory() == null) {
+            throw new IllegalArgumentException("La solicitud de alquiler no tiene una modalidad seleccionada.");
         }
         if (!request.getStartDate().isBefore(request.getEndDate())) {
-            throw new IllegalArgumentException("La fecha inicial debe ser anterior a la fecha final.");
+            throw new IllegalArgumentException("La fecha de inicio " + request.getStartDate()
+                    + " debe ser anterior a la fecha de finalización " + request.getEndDate() + ".");
         }
         if (paymentToken == null || paymentToken.isBlank()) {
-            throw new IllegalArgumentException("Se requiere el token de pago.");
+            throw new IllegalArgumentException("No se puede enviar el pago: falta el token de pago de prueba.");
         }
     }
 }

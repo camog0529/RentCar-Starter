@@ -10,7 +10,7 @@ public record PaymentResult(Status status, String message) {
 
     public PaymentResult {
         if (status == null) {
-            throw new IllegalArgumentException("Se requiere el estado del pago.");
+            throw new IllegalArgumentException("El resultado del pago debe indicar si fue aprobado, rechazado o fallido.");
         }
         message = message == null ? "" : message;
     }
