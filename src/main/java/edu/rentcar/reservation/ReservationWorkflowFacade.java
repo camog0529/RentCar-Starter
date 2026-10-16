@@ -39,35 +39,57 @@ public final class ReservationWorkflowFacade {
         validate(request, paymentToken);
         if (!availabilityService.isAvailable(request)) {
             throw new IllegalStateException("No se puede crear la reservación: el vehículo "
-                    + request.getVehicle().getId() + " no está disponible del "
-                    + request.getStartDate() + " al " + request.getEndDate() + ".");
+                    + request.getVehicle().getId() + " no está disponible.");
         }
 
         String reservationId = "RES-" + nextReservationNumber.getAndIncrement();
         BigDecimal total = costCalculator.calculate(request);
+
         PaymentResult paymentResult = paymentGateway.process(new PaymentRequest(
-                reservationId,
-                request.getCustomer().getId(),
-                total,
-                paymentToken
+                reservationId, request.getCustomer().getId(), total, paymentToken
         ));
+
         if (paymentResult == null) {
-            throw new IllegalStateException("La pasarela de pago no devolvió un resultado para la reservación "
-                    + reservationId + ".");
+            throw new IllegalStateException("La pasarela de pago no devolvió un resultado.");
         }
 
         String status = paymentResult.isApproved() ? "CONFIRMED" : "FAILED";
         Reservation reservation = new Reservation(
-                reservationId,
-                request.getCustomer().getId(),
-                request.getVehicle().getId(),
-                request.getStartDate(),
-                request.getEndDate(),
-                status
+                reservationId, request.getCustomer().getId(), request.getVehicle().getId(),
+                request.getStartDate(), request.getEndDate(), status
         );
         reservationRepository.save(reservation);
         return new ReservationWorkflowResult(reservation, total, paymentResult);
     }
+
+    public ReservationWorkflowResult createReservation(
+            edu.rentcar.model.Customer customer,
+            edu.rentcar.model.Vehicle vehicle,
+            java.time.LocalDate startDate,
+            java.time.LocalDate endDate,
+            String mode,
+            java.util.List<String> services,
+            String paymentToken) {
+
+        // A. La lógica de control del Factory vive legítimamente aquí en el negocio
+        edu.rentcar.model.factory.RentalModeFactory modeFactory = switch (mode != null ? mode : "") {
+            case "Premium" -> new edu.rentcar.model.factory.PremiumModeFactory();
+            case "All Risk" -> new edu.rentcar.model.factory.AllRiskModeFactory();
+            default -> new edu.rentcar.model.factory.BasicModeFactory();
+        };
+
+        // B. El patrón Builder construye la solicitud aquí en el negocio de manera segura
+        RentalRequest request = new RentalRequest.Builder()
+                .customer(customer)
+                .vehicle(vehicle)
+                .dates(startDate, endDate)
+                .rentalModeFactory(modeFactory)
+                .build();
+
+        // C. Reutiliza todo el flujo de validación, disponibilidad, costos y pasarela de pago de arriba
+        return this.createReservation(request, paymentToken);
+    }
+
 
     private void validate(RentalRequest request, String paymentToken) {
         if (request == null) {

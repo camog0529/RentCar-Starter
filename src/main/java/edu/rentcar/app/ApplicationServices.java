@@ -12,6 +12,7 @@ import edu.rentcar.reservation.ReservationRepository;
 import edu.rentcar.reservation.ReservationWorkflowFacade;
 import edu.rentcar.reservation.VehicleAvailabilityService;
 import edu.rentcar.service.VehicleService;
+
 /**
  * ApplicationServices es un Service Locator: los controllers consultan una clase global para obtener los servicios.
  */
@@ -37,12 +38,13 @@ public final class ApplicationServices {
                     PAYMENT_GATEWAY
             );
 
-    private ApplicationServices() {
-    }
+
+    private ApplicationServices() {}
 
     public static VehicleService vehicleService() {
         return VEHICLE_SERVICE;
     }
+
 
     public static ReservationWorkflowFacade reservationWorkflowFacade() {
         return RESERVATION_WORKFLOW_FACADE;

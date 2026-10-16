@@ -1,12 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.rentcar.controller.ReservationController" spacing="14">
-    <Label text="Rental reservation" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8;">
-        <Label text="Reservation workflow" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-        <Label text="This screen is a starting point. The reservation workflow, request validation, availability, pricing, service packages and payment integration must be designed and implemented as part of the assignment." wrapText="true"/>
-        <Label text="No reservation is created by the starter application." style="-fx-text-fill: #64748b;"/>
-    </VBox>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="573.0" prefWidth="478.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label alignment="CENTER" prefHeight="74.0" prefWidth="169.0" text="NEW RENTAL REQUEST" />
+      <GridPane alignment="CENTER" prefHeight="270.0" prefWidth="310.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="331.0" minWidth="10.0" prefWidth="131.8" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="583.0000076293945" minWidth="10.0" prefWidth="179.39999999999998" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="94.0" text="CUSTOMER:" GridPane.rowIndex="1" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label alignment="CENTER" prefHeight="34.0" prefWidth="80.0" text="VEHICULOS: " textAlignment="CENTER" GridPane.rowIndex="2" />
+            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="24.0" prefWidth="118.0" text="START DATE:" textAlignment="CENTER" GridPane.rowIndex="3" />
+            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label alignment="CENTER" prefHeight="27.0" prefWidth="81.0" text="END DATE:" GridPane.rowIndex="4" />
+            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="RENTAL MODE:" GridPane.rowIndex="5" />
+            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <CheckBox mnemonicParsing="false" text="GPS" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <CheckBox mnemonicParsing="false" text="BABY SEAT" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <CheckBox mnemonicParsing="false" text="ADDITIONAL DRIVER" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label alignment="CENTER" prefHeight="27.0" prefWidth="128.0" text="ADDITIONAL SERVICE" GridPane.rowIndex="7" />
+         </children>
+      </GridPane>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="81.0" text="TOTAL RATE" textAlignment="CENTER" />
+            <Label prefHeight="28.0" prefWidth="85.0" text="\$0.00 DAY" GridPane.columnIndex="1" />
+         </children>
+      </GridPane>
+      <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" text="CONFIRM RESERVATION" />
+   </children>
 </VBox>
