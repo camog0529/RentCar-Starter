@@ -24,6 +24,20 @@
 
 <!-- Para cada patrón requerido, documenten el problema que resuelve, las clases participantes y dónde se utiliza. -->
 
+### Adapter — integración con pagos (RF-004)
+
+`PaymentGateway` es el contrato interno que utiliza la aplicación. `PaymentApiAdapter` implementa ese contrato y traduce `PaymentRequest` al `PaymentApiRequest` de la biblioteca proporcionada por el docente. También convierte la respuesta externa en un `PaymentResult` propio de RentCar. Así, las reglas de negocio no dependen de los tipos del proveedor de pagos.
+
+El adaptador distingue pago aprobado, rechazado y error técnico. Si falla la comunicación, devuelve un resultado fallido; si el hilo es interrumpido, restaura su señal de interrupción. El token de pago se trata como dato sensible y se oculta en la representación textual de la solicitud.
+
+### Facade — coordinación de reservaciones (RF-002)
+
+`ReservationWorkflowFacade` expone una operación para coordinar el alquiler: valida la solicitud y el token, verifica disponibilidad, calcula el costo, solicita el pago mediante `PaymentGateway` y guarda la reservación como `CONFIRMED` o `FAILED` según el resultado. La interfaz gráfica puede llamar a esta operación sin coordinar directamente cada paso.
+
+La Facade depende de abstracciones, incluida `PaymentGateway`. Cuando se integre el Proxy de RF-006, se debe inyectar el Proxy como `PaymentGateway` para que la verificación de autorización ocurra antes de que la solicitud llegue al adaptador externo. La comprobación de autorización no forma parte de `PaymentApiAdapter`.
+
+`VehicleAvailabilityService` considera los estados `CONFIRMED` y los períodos superpuestos. `RentalCostCalculator` calcula la tarifa diaria del vehículo y la cobertura de la modalidad por los días solicitados. Los servicios adicionales y paquetes se incorporarán cuando se integren Decorator y Composite (RF-005 y RF-007).
+
 ## 6. Ejecución de la aplicación
 
 ### Requisitos
