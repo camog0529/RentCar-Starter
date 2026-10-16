@@ -2,7 +2,7 @@ package edu.rentcar.payment;
 
 import java.math.BigDecimal;
 
-/** Payment data expressed in RentCar's application model. */
+/** Datos de pago expresados en el modelo interno de RentCar. */
 public record PaymentRequest(
         String reservationId,
         String customerId,
@@ -11,24 +11,24 @@ public record PaymentRequest(
 ) {
     public PaymentRequest {
         if (reservationId == null || reservationId.isBlank()) {
-            throw new IllegalArgumentException("Reservation ID is required.");
+            throw new IllegalArgumentException("Se requiere el identificador de la reservación.");
         }
         if (customerId == null || customerId.isBlank()) {
-            throw new IllegalArgumentException("Customer ID is required.");
+            throw new IllegalArgumentException("Se requiere el identificador del cliente.");
         }
         if (amount == null || amount.signum() <= 0) {
-            throw new IllegalArgumentException("Payment amount must be greater than zero.");
+            throw new IllegalArgumentException("El valor del pago debe ser mayor que cero.");
         }
         if (paymentToken == null || paymentToken.isBlank()) {
-            throw new IllegalArgumentException("Payment token is required.");
+            throw new IllegalArgumentException("Se requiere el token de pago.");
         }
     }
 
     @Override
     public String toString() {
-        return "PaymentRequest[reservationId=" + reservationId
-                + ", customerId=" + customerId
-                + ", amount=" + amount
-                + ", paymentToken=[REDACTED]]";
+        return "SolicitudPago[idReservacion=" + reservationId
+                + ", idCliente=" + customerId
+                + ", valor=" + amount
+                + ", tokenPago=[OCULTO]]";
     }
 }

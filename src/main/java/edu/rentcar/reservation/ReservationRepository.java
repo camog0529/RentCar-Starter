@@ -4,7 +4,7 @@ import edu.rentcar.model.Reservation;
 
 import java.util.List;
 
-/** In-memory reservation storage contract for the current application scope. */
+/** Contrato para almacenar reservaciones en memoria durante la ejecución. */
 public interface ReservationRepository {
     List<Reservation> findAll();
 

@@ -5,7 +5,7 @@ import edu.rentcar.model.Reservation;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Simple process-local reservation storage, as required by the assignment. */
+/** Almacenamiento de reservaciones en memoria, según el alcance del parcial. */
 public final class InMemoryReservationRepository implements ReservationRepository {
     private final List<Reservation> reservations = new ArrayList<>();
 
@@ -17,7 +17,7 @@ public final class InMemoryReservationRepository implements ReservationRepositor
     @Override
     public void save(Reservation reservation) {
         if (reservation == null) {
-            throw new IllegalArgumentException("Reservation is required.");
+            throw new IllegalArgumentException("Se requiere una reservación.");
         }
         reservations.add(reservation);
     }

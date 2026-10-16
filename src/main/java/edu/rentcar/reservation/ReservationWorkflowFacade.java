@@ -9,7 +9,7 @@ import edu.rentcar.payment.PaymentResult;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicLong;
 
-/** Coordinates validation, availability, pricing, payment, and reservation recording. */
+/** Coordina la validación, disponibilidad, tarifa, pago y registro de la reservación. */
 public final class ReservationWorkflowFacade {
     private final ReservationRepository reservationRepository;
     private final VehicleAvailabilityService availabilityService;
@@ -25,7 +25,7 @@ public final class ReservationWorkflowFacade {
     ) {
         if (reservationRepository == null || availabilityService == null
                 || costCalculator == null || paymentGateway == null) {
-            throw new IllegalArgumentException("Reservation workflow dependencies are required.");
+            throw new IllegalArgumentException("Los componentes del flujo de reservación son obligatorios.");
         }
         this.reservationRepository = reservationRepository;
         this.availabilityService = availabilityService;
@@ -37,7 +37,7 @@ public final class ReservationWorkflowFacade {
     public ReservationWorkflowResult createReservation(RentalRequest request, String paymentToken) {
         validate(request, paymentToken);
         if (!availabilityService.isAvailable(request)) {
-            throw new IllegalStateException("The selected vehicle is not available for these dates.");
+            throw new IllegalStateException("El vehículo seleccionado no está disponible para las fechas solicitadas.");
         }
 
         String reservationId = "RES-" + nextReservationNumber.getAndIncrement();
@@ -64,18 +64,18 @@ public final class ReservationWorkflowFacade {
 
     private void validate(RentalRequest request, String paymentToken) {
         if (request == null) {
-            throw new IllegalArgumentException("Rental request is required.");
+            throw new IllegalArgumentException("Se requiere la solicitud de alquiler.");
         }
         if (request.getCustomer() == null || request.getVehicle() == null
                 || request.getStartDate() == null || request.getEndDate() == null
                 || request.getRentalModeFactory() == null) {
-            throw new IllegalArgumentException("Rental request is incomplete.");
+            throw new IllegalArgumentException("La solicitud de alquiler está incompleta.");
         }
         if (!request.getStartDate().isBefore(request.getEndDate())) {
-            throw new IllegalArgumentException("Start date must be before end date.");
+            throw new IllegalArgumentException("La fecha inicial debe ser anterior a la fecha final.");
         }
         if (paymentToken == null || paymentToken.isBlank()) {
-            throw new IllegalArgumentException("Payment token is required.");
+            throw new IllegalArgumentException("Se requiere el token de pago.");
         }
     }
 }

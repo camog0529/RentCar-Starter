@@ -5,7 +5,7 @@ import edu.rentcar.payment.PaymentResult;
 
 import java.math.BigDecimal;
 
-/** Outcome returned to the controller after the reservation workflow. */
+/** Resultado que se devuelve al controlador al terminar el flujo de reservación. */
 public record ReservationWorkflowResult(
         Reservation reservation,
         BigDecimal total,

@@ -3,13 +3,13 @@ package edu.rentcar.reservation;
 import edu.rentcar.model.RentalRequest;
 import edu.rentcar.model.Reservation;
 
-/** Checks date overlap against reservations confirmed during this application run. */
+/** Comprueba cruces de fechas con reservaciones confirmadas en esta ejecución. */
 public final class VehicleAvailabilityService {
     private final ReservationRepository reservationRepository;
 
     public VehicleAvailabilityService(ReservationRepository reservationRepository) {
         if (reservationRepository == null) {
-            throw new IllegalArgumentException("Reservation repository is required.");
+            throw new IllegalArgumentException("El repositorio de reservaciones es obligatorio.");
         }
         this.reservationRepository = reservationRepository;
     }

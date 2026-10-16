@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.temporal.ChronoUnit;
 
-/** Calculates base rental and selected mode coverage costs. */
+/** Calcula el costo base del alquiler y la cobertura de la modalidad seleccionada. */
 public final class RentalCostCalculator {
     public BigDecimal calculate(RentalRequest request) {
         long rentalDays = ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate());
