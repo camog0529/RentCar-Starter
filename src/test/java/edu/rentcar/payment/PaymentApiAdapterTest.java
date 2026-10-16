@@ -3,7 +3,6 @@ package edu.rentcar.payment;
 import com.rentcar.paymentclient.PaymentApiRequest;
 import com.rentcar.paymentclient.PaymentApiResponse;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicReference;
