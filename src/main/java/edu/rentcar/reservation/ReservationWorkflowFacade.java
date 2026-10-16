@@ -20,6 +20,7 @@ import edu.rentcar.payment.PaymentResult;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.concurrent.atomic.AtomicLong;
 
 /** Coordina la validación, disponibilidad, tarifa, pago y registro de la reservación. */
@@ -79,7 +80,10 @@ public final class ReservationWorkflowFacade {
                 status
         );
         reservationRepository.save(reservation);
-        return new ReservationWorkflowResult(reservation, total, paymentResult);
+        String servicesDescription = request.getServices().stream()
+                .map(service -> service.getDescription())
+                .collect(Collectors.joining(", "));
+        return new ReservationWorkflowResult(reservation, total, paymentResult, servicesDescription);
     }
 
     /** Construye la solicitud desde los valores seleccionados en la interfaz. */

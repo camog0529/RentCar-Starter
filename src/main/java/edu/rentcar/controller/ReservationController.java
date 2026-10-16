@@ -61,9 +61,12 @@ public class ReservationController {
                     .createReservation(customer, vehicle, startDate, endDate, mode, services, "tkn_test_12345");
 
             if ("CONFIRMED".equals(result.reservation().getStatus())) {
+                String servicesDescription = result.servicesDescription().isBlank()
+                        ? ""
+                        : "\nServicios adicionales: " + result.servicesDescription();
                 showAlert(Alert.AlertType.INFORMATION, "Reservation Confirmed",
                         "Successfully reserved! ID: " + result.reservation().getId() +
-                                "\nTotal Paid: $" + result.total());
+                                "\nTotal Paid: $" + result.total() + servicesDescription);
             } else {
                 showAlert(Alert.AlertType.ERROR, "Payment Failed", "The credit card transaction was rejected.");
             }
