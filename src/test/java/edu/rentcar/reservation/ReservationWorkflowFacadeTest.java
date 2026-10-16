@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -98,6 +99,48 @@ class ReservationWorkflowFacadeTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> facade.createReservation(rentalRequest(), " "));
+
+        assertNull(capturedPayment.get());
+        assertTrue(repository.findAll().isEmpty());
+    }
+
+    @Test
+    void selectedDecoratedServicesAreIncludedInReservationCost() {
+        InMemoryReservationRepository repository = new InMemoryReservationRepository();
+        ReservationWorkflowFacade facade = facade(repository,
+                request -> new PaymentResult(PaymentResult.Status.APPROVED, "Pago aprobado."));
+
+        ReservationWorkflowResult result = facade.createReservation(
+                new Customer("CUS-7", "Cliente de prueba", "cliente@example.com", true),
+                new Vehicle("CAR-9", "Toyota", "Corolla", "Sedan", 2024, 150000, "Available"),
+                LocalDate.of(2026, 10, 20),
+                LocalDate.of(2026, 10, 22),
+                "Basic",
+                List.of("GPS", "BABY_SEAT"),
+                "token-de-prueba"
+        );
+
+        assertEquals(new BigDecimal("300050.00"), result.total());
+    }
+
+    @Test
+    void rejectsUnknownSelectedServiceBeforeCallingGateway() {
+        InMemoryReservationRepository repository = new InMemoryReservationRepository();
+        AtomicReference<PaymentRequest> capturedPayment = new AtomicReference<>();
+        ReservationWorkflowFacade facade = facade(repository, request -> {
+            capturedPayment.set(request);
+            return new PaymentResult(PaymentResult.Status.APPROVED, "Pago aprobado.");
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> facade.createReservation(
+                new Customer("CUS-7", "Cliente de prueba", "cliente@example.com", true),
+                new Vehicle("CAR-9", "Toyota", "Corolla", "Sedan", 2024, 150000, "Available"),
+                LocalDate.of(2026, 10, 20),
+                LocalDate.of(2026, 10, 22),
+                "Basic",
+                List.of("INVALID_SERVICE"),
+                "token-de-prueba"
+        ));
 
         assertNull(capturedPayment.get());
         assertTrue(repository.findAll().isEmpty());

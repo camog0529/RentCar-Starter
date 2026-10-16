@@ -4,6 +4,11 @@ import edu.rentcar.model.Customer;
 import edu.rentcar.model.RentalRequest;
 import edu.rentcar.model.Reservation;
 import edu.rentcar.model.Vehicle;
+import edu.rentcar.model.composite.IndividualRentalService;
+import edu.rentcar.model.decorator.AdditionalDriverDecorator;
+import edu.rentcar.model.decorator.BabySeatDecorator;
+import edu.rentcar.model.decorator.GpsDecorator;
+import edu.rentcar.model.decorator.Rentable;
 import edu.rentcar.model.factory.AllRiskModeFactory;
 import edu.rentcar.model.factory.BasicModeFactory;
 import edu.rentcar.model.factory.PremiumModeFactory;
@@ -93,12 +98,32 @@ public final class ReservationWorkflowFacade {
             default -> new BasicModeFactory();
         };
 
-        RentalRequest request = new RentalRequest.Builder()
+        RentalRequest.Builder builder = new RentalRequest.Builder()
                 .customer(customer)
                 .vehicle(vehicle)
                 .dates(startDate, endDate)
-                .rentalModeFactory(modeFactory)
-                .build();
+                .rentalModeFactory(modeFactory);
+
+        Rentable decoratedVehicle = vehicle;
+        if (services != null) {
+            for (String service : services) {
+                String originalDescription = decoratedVehicle.getDescription();
+                double originalRate = decoratedVehicle.getDailyRate();
+                decoratedVehicle = switch (service == null ? "" : service) {
+                    case "GPS" -> new GpsDecorator(decoratedVehicle);
+                    case "BABY_SEAT" -> new BabySeatDecorator(decoratedVehicle);
+                    case "ADDITIONAL_DRIVER" -> new AdditionalDriverDecorator(decoratedVehicle);
+                    default -> throw new IllegalArgumentException(
+                            "El servicio adicional " + service + " no está reconocido.");
+                };
+                String description = decoratedVehicle.getDescription()
+                        .substring(originalDescription.length() + 3);
+                BigDecimal dailyCost = BigDecimal.valueOf(decoratedVehicle.getDailyRate() - originalRate);
+                builder.addService(new IndividualRentalService(description, dailyCost));
+            }
+        }
+
+        RentalRequest request = builder.build();
         return createReservation(request, paymentToken);
     }
 
