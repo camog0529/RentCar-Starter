@@ -5,7 +5,7 @@
 ## 1. Integrantes
 
 - CARLOS ANDRES MORALES GONZALEZ  — Código Estudiantil
-- Nombre del Compañero 1 — Código Estudiantil
+- JUAN FELIPE GIRALDO CASTILLO — 109455448
 - Nombre del Compañero 2 — Código Estudiantil (si aplica)
 
 ## 2. Descripción de la solución
