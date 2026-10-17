@@ -58,7 +58,7 @@ public class ReservationController {
         try {
             // Nota: Si te sigue marcando rojo 'reservationWorkflowFacade()', mira el paso 2 de abajo
             ReservationWorkflowResult result = ApplicationServices.reservationWorkflowFacade()
-                    .createReservation(customer, vehicle, startDate, endDate, mode, services, "tkn_test_12345");
+                    .createReservation(customer, vehicle, startDate, endDate, mode, services, "tok_approved");
 
             if ("CONFIRMED".equals(result.reservation().getStatus())) {
                 String servicesDescription = result.servicesDescription().isBlank()

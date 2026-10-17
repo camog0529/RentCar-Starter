@@ -59,9 +59,21 @@ En IntelliJ IDEA también se puede ejecutar la tarea `application > run` desde l
 - **Windows PowerShell:** ` .\gradlew.bat test `
 - **Git Bash / macOS / Linux:** ` ./gradlew test `
 
+Estas pruebas unitarias se ejecutan con Gradle y no necesitan que la API externa esté iniciada. Las pruebas del Adapter usan respuestas simuladas para verificar aprobación, rechazo y errores de comunicación.
+
 ## 7. Integración de pagos
 
-<!-- Documenten cómo configurar y probar la integración que implementó el equipo, según el enunciado. No incluyan claves, contraseñas ni tokens reales. -->
+La API simulada entregada por el profesor se ejecuta como un proceso independiente. Para probar la integración real, abre una terminal en la raíz del proyecto y ejecuta:
+
+```powershell
+java -jar external/payment-api.jar
+```
+
+Deja esa terminal abierta. En otra terminal, inicia la aplicación con ` .\gradlew.bat run `. La interfaz envía el token de demostración `tok_approved`, que la API reconoce como pago aprobado.
+
+Para comprobar otros resultados, cambia temporalmente el token de demostración en `ReservationController` por `tok_declined` (rechazo) o `tok_api_error` (error HTTP 503), mantén la API iniciada y vuelve a ejecutar la aplicación. No uses tokens ni credenciales de pago reales.
+
+La guía del servicio incluye comandos para comprobar el estado de la API, enviar solicitudes directas y revisar las respuestas esperadas: [Guía de ejecución y pruebas de la API de pagos](external/README-api-pagos.md).
 
 ## 8. Pruebas realizadas
 
