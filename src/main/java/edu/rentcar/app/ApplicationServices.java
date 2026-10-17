@@ -13,8 +13,11 @@ import edu.rentcar.reservation.ReservationWorkflowFacade;
 import edu.rentcar.reservation.VehicleAvailabilityService;
 import edu.rentcar.service.VehicleService;
 
-/** Provee las instancias compartidas que usan los controladores de la aplicación. */
+/**
+ * ApplicationServices es un Service Locator: los controllers consultan una clase global para obtener los servicios.
+ */
 public final class ApplicationServices {
+
     private static final VehicleService VEHICLE_SERVICE =
             new VehicleService(new VehicleRepository());
 
@@ -44,4 +47,7 @@ public final class ApplicationServices {
     public static ReservationWorkflowFacade reservationWorkflowFacade() {
         return RESERVATION_WORKFLOW_FACADE;
     }
+
+    public static final edu.rentcar.repository.InMemoryCustomerRepository CUSTOMER_REPOSITORY =
+            new edu.rentcar.repository.InMemoryCustomerRepository();
 }

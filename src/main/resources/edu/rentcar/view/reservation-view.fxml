@@ -1,65 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="573.0" prefWidth="478.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label alignment="CENTER" prefHeight="74.0" prefWidth="169.0" text="NEW RENTAL REQUEST" />
-      <GridPane alignment="CENTER" prefHeight="270.0" prefWidth="310.0">
-        <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="331.0" minWidth="10.0" prefWidth="131.8" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="583.0000076293945" minWidth="10.0" prefWidth="179.39999999999998" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="94.0" text="CUSTOMER:" GridPane.rowIndex="1" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" prefHeight="34.0" prefWidth="80.0" text="VEHICULOS: " textAlignment="CENTER" GridPane.rowIndex="2" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="24.0" prefWidth="118.0" text="START DATE:" textAlignment="CENTER" GridPane.rowIndex="3" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label alignment="CENTER" prefHeight="27.0" prefWidth="81.0" text="END DATE:" GridPane.rowIndex="4" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="RENTAL MODE:" GridPane.rowIndex="5" />
-            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <CheckBox mnemonicParsing="false" text="GPS" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <CheckBox mnemonicParsing="false" text="BABY SEAT" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <CheckBox mnemonicParsing="false" text="ADDITIONAL DRIVER" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <Label alignment="CENTER" prefHeight="27.0" prefWidth="128.0" text="ADDITIONAL SERVICE" GridPane.rowIndex="7" />
-         </children>
-      </GridPane>
-      <GridPane>
-        <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="81.0" text="TOTAL RATE" textAlignment="CENTER" />
-            <Label prefHeight="28.0" prefWidth="85.0" text="\$0.00 DAY" GridPane.columnIndex="1" />
-         </children>
-      </GridPane>
-      <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" text="CONFIRM RESERVATION" />
-   </children>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="650.0" prefWidth="500.0" spacing="12" style="-fx-padding: 20; -fx-background-color: #ffffff;"
+      xmlns="http://javafx.com" xmlns:fx="http://javafx.com"
+      fx:controller="edu.rentcar.controller.ReservationController">
+    <children>
+        <Label alignment="CENTER" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #172b4d;"
+               text="NEW RENTAL REQUEST"/>
+
+        <GridPane alignment="CENTER" hgap="10" prefHeight="420.0" prefWidth="460.0" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0"
+                                   prefWidth="140.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="280.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label style="-fx-font-weight: bold;" text="CUSTOMER:" GridPane.rowIndex="0"/>
+                <ComboBox fx:id="customerCombo" prefWidth="260.0" promptText="Select Customer" GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"/>
+
+                <Label style="-fx-font-weight: bold;" text="VEHICLE:" GridPane.rowIndex="1"/>
+                <ComboBox fx:id="vehicleCombo" prefWidth="260.0" promptText="Select Vehicle" GridPane.columnIndex="1"
+                          GridPane.rowIndex="1"/>
+
+                <Label style="-fx-font-weight: bold;" text="START DATE:" GridPane.rowIndex="2"/>
+                <DatePicker fx:id="startDatePicker" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label style="-fx-font-weight: bold;" text="END DATE:" GridPane.rowIndex="3"/>
+                <DatePicker fx:id="endDatePicker" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                <Label style="-fx-font-weight: bold;" text="RENTAL MODE:" GridPane.rowIndex="4"/>
+                <ComboBox fx:id="rentalModeCombo" prefWidth="260.0" promptText="Select Mode" GridPane.columnIndex="1"
+                          GridPane.rowIndex="4"/>
+
+                <!-- Nuevos Campos Solicitados -->
+                <Label style="-fx-font-weight: bold;" text="PAYMENT METHOD:" GridPane.rowIndex="5"/>
+                <ComboBox fx:id="paymentMethodCombo" prefWidth="260.0" promptText="Select Method"
+                          GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                <Label style="-fx-font-weight: bold;" text="CARD TOKEN / DATA:" GridPane.rowIndex="6"/>
+                <ComboBox fx:id="paymentStatusCombo" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <!-- Servicios Opcionales Decoradores -->
+                <Label style="-fx-font-weight: bold;" text="ADDITIONAL SERVICES:" GridPane.rowIndex="7"/>
+                <CheckBox fx:id="gpsCheck" mnemonicParsing="false" text="GPS Navigation System" GridPane.columnIndex="1"
+                          GridPane.rowIndex="7"/>
+                <CheckBox fx:id="babySeatCheck" mnemonicParsing="false" text="Child Safety Baby Seat"
+                          GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+                <CheckBox fx:id="additionalDriverCheck" mnemonicParsing="false" text="Additional Authorized Driver"
+                          GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+            </children>
+        </GridPane>
+
+        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 5 0 0 0;">
+            <children>
+                <Button fx:id="confirmReservationButton" alignment="CENTER" mnemonicParsing="false"
+                        onAction="#onConfirmReservation" prefHeight="40.0" prefWidth="280.0"
+                        style="-fx-background-color: #2457a7; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"
+                        text="CONFIRM RESERVATION"/>
+                <TableView fx:id="historyTable" prefHeight="150.0" prefWidth="450.0">
+                    <columns>
+                        <TableColumn fx:id="idCol" prefWidth="90.0" text="Reservation ID" />
+                        <TableColumn fx:id="customerCol" prefWidth="130.0" text="Customer" />
+                        <TableColumn fx:id="statusCol" prefWidth="110.0" text="Payment Status" />
+                        <TableColumn fx:id="totalCol" prefWidth="110.0" text="Total Paid" />
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+    </children>
 </VBox>

@@ -34,4 +34,5 @@ public final class RentalCostCalculator {
                 .multiply(BigDecimal.valueOf(rentalDays))
                 .setScale(2, RoundingMode.HALF_UP);
     }
+
 }

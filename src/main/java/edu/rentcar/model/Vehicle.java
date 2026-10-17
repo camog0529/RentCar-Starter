@@ -62,4 +62,9 @@ public class Vehicle implements Rentable {
     public String getDescription(){
         return getDisplayName() + "(" + getCategory() +")";
     }
+
+    @Override
+    public String toString (){
+        return this.getId()+" - "+this.getBrand()+" - "+this.getModel();
+    }
 }

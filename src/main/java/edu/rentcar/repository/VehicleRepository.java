@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleRepository {
-    private final List<Vehicle> vehicles = new ArrayList<>(SampleData.vehicles());
+    private List<Vehicle> vehicles = new ArrayList<>(SampleData.vehicles());
     private int nextId = 1005;
 
     public List<Vehicle> findAll() {
-        return List.copyOf(vehicles);
+        return vehicles;
     }
 
     public Vehicle save(String brand, String model, String category,
