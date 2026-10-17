@@ -56,9 +56,9 @@ El adaptador distingue pago aprobado, rechazado y error técnico. Si falla la co
 
 `ReservationWorkflowFacade` expone una operación para coordinar el alquiler: valida la solicitud y el token, verifica disponibilidad, calcula el costo, solicita el pago mediante `PaymentGateway` y guarda la reservación como `CONFIRMED` o `FAILED` según el resultado. La interfaz gráfica puede llamar a esta operación sin coordinar directamente cada paso.
 
-La Facade depende de abstracciones, incluida `PaymentGateway`. Cuando se integre el Proxy de RF-006, se debe inyectar el Proxy como `PaymentGateway` para que la verificación de autorización ocurra antes de que la solicitud llegue al adaptador externo. La comprobación de autorización no forma parte de `PaymentApiAdapter`.
+La Facade depende de abstracciones, incluida `PaymentGateway`. En la configuración actual, `ApplicationServices` inyecta `PaymentGatewayProxy`, que consulta al servicio de autorización antes de delegar el cobro en `PaymentApiAdapter`. El servicio consulta el repositorio de clientes en memoria, por lo que también reconoce clientes creados durante la ejecución. La comprobación de autorización no forma parte de `PaymentApiAdapter`.
 
-`VehicleAvailabilityService` considera los estados `CONFIRMED` y los períodos superpuestos. `RentalCostCalculator` calcula la tarifa diaria del vehículo y la cobertura de la modalidad por los días solicitados. Los servicios adicionales y paquetes se incorporarán cuando se integren Decorator y Composite (RF-005 y RF-007).
+`VehicleAvailabilityService` considera los estados `CONFIRMED` y los períodos superpuestos. `RentalCostCalculator` suma la tarifa diaria del vehículo, la cobertura de la modalidad y los componentes de servicios adicionales por los días solicitados. La Facade convierte las opciones GPS, silla para bebé y conductor adicional en servicios individuales decorados. `ServicePackage` permite crear paquetes simples o anidados y cuenta con pruebas unitarias; por ahora, la pantalla de reservaciones no ofrece una opción para seleccionar esos paquetes.
 
 ## 6. Ejecución de la aplicación
 
@@ -67,11 +67,11 @@ La Facade depende de abstracciones, incluida `PaymentGateway`. Cuando se integre
 - Distribución de Gradle (manejada automáticamente por el Wrapper del proyecto).
 
 ### Ejecutar la aplicación de forma local
-Abra su terminal de **Git Bash** en la raíz del proyecto y ejecute:
+Abra una terminal en la raíz del proyecto y ejecute el comando correspondiente a su sistema:
 ```bash
 ./gradlew run
 ```
-*(En Windows PowerShell puede utilizar: `.\gradlew.bat run`)*.
+En Windows PowerShell utilice ` .\gradlew.bat run` (sin el espacio inicial).
 
 ### Ejecutar la suite de pruebas automatizadas
 Para correr todas las especificaciones de pruebas unitarias y de integración de patrones:
@@ -87,10 +87,7 @@ La pasarela se conecta localmente con el servidor de transacciones simulado prov
 
 ### Configuración del Servidor de Pagos
 Antes de realizar transacciones en la interfaz de usuario de JavaFX, abra una ventana de **Git Bash independiente** y levante el servicio API externo executando:
-```bash
-cd external
-java -jar payment-api.jar
-```
+Desde una terminal en la raíz del proyecto ejecute `java -jar external/payment-api.jar`. En PowerShell también puede usar la misma ruta con barras invertidas: `java -jar external\payment-api.jar`.
 El servidor quedará escuchando peticiones REST en `http://localhost:8080/api/payments`. La guía detallada está en [Guía de ejecución y pruebas de la API de pagos](external/README-api-pagos.md).
 
 ### Tokens de Simulación Aceptados
