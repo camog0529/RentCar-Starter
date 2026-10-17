@@ -20,6 +20,7 @@ import edu.rentcar.payment.PaymentResult;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -96,10 +97,13 @@ public final class ReservationWorkflowFacade {
             List<String> services,
             String paymentToken
     ) {
-        RentalModeFactory modeFactory = switch (mode != null ? mode : "") {
-            case "Premium" -> new PremiumModeFactory();
-            case "All Risk" -> new AllRiskModeFactory();
-            default -> new BasicModeFactory();
+        String normalizedMode = mode == null ? "BASIC" : mode.trim().toUpperCase(Locale.ROOT);
+        RentalModeFactory modeFactory = switch (normalizedMode) {
+            case "BASIC" -> new BasicModeFactory();
+            case "PREMIUM" -> new PremiumModeFactory();
+            case "ALL_RISK", "ALL RISK" -> new AllRiskModeFactory();
+            default -> throw new IllegalArgumentException(
+                    "La modalidad de alquiler " + mode + " no está reconocida.");
         };
 
         RentalRequest.Builder builder = new RentalRequest.Builder()

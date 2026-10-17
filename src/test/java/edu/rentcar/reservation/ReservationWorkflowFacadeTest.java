@@ -124,6 +124,49 @@ class ReservationWorkflowFacadeTest {
     }
 
     @Test
+    void premiumModeSelectedInInterfaceIncludesPremiumCoverageCost() {
+        ReservationWorkflowFacade facade = facade(new InMemoryReservationRepository(),
+                request -> new PaymentResult(PaymentResult.Status.APPROVED, "Pago aprobado."));
+
+        ReservationWorkflowResult result = facade.createReservation(
+                new Customer("CUS-7", "Cliente de prueba", "cliente@example.com", true),
+                new Vehicle("CAR-9", "Toyota", "Corolla", "Sedan", 2024, 150000, "Available"),
+                LocalDate.of(2026, 10, 20), LocalDate.of(2026, 10, 22),
+                "PREMIUM", List.of(), "token-de-prueba");
+
+        assertEquals(new BigDecimal("300056.00"), result.total());
+    }
+
+    @Test
+    void allRiskModeSelectedInInterfaceIncludesAllRiskCoverageCost() {
+        ReservationWorkflowFacade facade = facade(new InMemoryReservationRepository(),
+                request -> new PaymentResult(PaymentResult.Status.APPROVED, "Pago aprobado."));
+
+        ReservationWorkflowResult result = facade.createReservation(
+                new Customer("CUS-7", "Cliente de prueba", "cliente@example.com", true),
+                new Vehicle("CAR-9", "Toyota", "Corolla", "Sedan", 2024, 150000, "Available"),
+                LocalDate.of(2026, 10, 20), LocalDate.of(2026, 10, 22),
+                "ALL_RISK", List.of(), "token-de-prueba");
+
+        assertEquals(new BigDecimal("300100.00"), result.total());
+    }
+
+    @Test
+    void rejectsUnknownRentalModeInsteadOfSilentlyUsingBasic() {
+        ReservationWorkflowFacade facade = facade(new InMemoryReservationRepository(),
+                request -> new PaymentResult(PaymentResult.Status.APPROVED, "Pago aprobado."));
+
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class, () ->
+                facade.createReservation(
+                        new Customer("CUS-7", "Cliente de prueba", "cliente@example.com", true),
+                        new Vehicle("CAR-9", "Toyota", "Corolla", "Sedan", 2024, 150000, "Available"),
+                        LocalDate.of(2026, 10, 20), LocalDate.of(2026, 10, 22),
+                        "DELUXE", List.of(), "token-de-prueba"));
+
+        assertTrue(error.getMessage().contains("no está reconocida"));
+    }
+
+    @Test
     void rejectsUnknownSelectedServiceBeforeCallingGateway() {
         InMemoryReservationRepository repository = new InMemoryReservationRepository();
         AtomicReference<PaymentRequest> capturedPayment = new AtomicReference<>();
