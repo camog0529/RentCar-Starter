@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 public record ReservationWorkflowResult(
         Reservation reservation,
         BigDecimal total,
-        PaymentResult paymentResult
+        PaymentResult paymentResult,
+        String servicesDescription
 ) {
+    public ReservationWorkflowResult {
+        servicesDescription = servicesDescription == null ? "" : servicesDescription;
+    }
 }

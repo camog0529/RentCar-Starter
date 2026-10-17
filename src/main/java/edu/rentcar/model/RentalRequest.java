@@ -42,7 +42,7 @@ public class RentalRequest {
         this.startDate = builder.startDate;
         this.endDate = builder.endDate;
         this.rentalModeFactory = builder.rentalModeFactory;
-        this.services = builder.services;
+        this.services = List.copyOf(builder.services);
     }
 
     // --- MÉTODOS ACCESORES (GETTERS) EN INGLÉS ---
