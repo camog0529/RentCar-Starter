@@ -45,7 +45,8 @@ public class ReservationController {
 
     @FXML
     public void initialize() {
-        customerCombo.getItems().setAll(ApplicationServices.CUSTOMER_REPOSITORY.findAll());        vehicleCombo.getItems().setAll(SampleData.vehicles());
+        customerCombo.getItems().setAll(ApplicationServices.CUSTOMER_REPOSITORY.findAll());
+        vehicleCombo.getItems().setAll(SampleData.vehicles());
         rentalModeCombo.getItems().setAll("BASIC", "PREMIUM", "ALL_RISK");
         paymentMethodCombo.getItems().setAll("CREDIT_CARD", "DEBIT_CARD");
         paymentStatusCombo.getItems().setAll("APPROVED", "DECLINED");
@@ -54,24 +55,15 @@ public class ReservationController {
         // Enlace de datos de las celdas de la tabla
         idCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().reservation().getId()));
 
-        // 🔍 BÚSQUEDA DINÁMICA: Busca el objeto Customer real en SampleData usando streams de Java
         customerCol.setCellValueFactory(data -> {
-            String resId = data.getValue().reservation().getId();
-
-            // Tus compañeros asumen que el ID de reserva contiene la referencia o se mapea de forma secuencial.
-            // Para asegurar la consistencia del objeto visual enlazado, recuperamos el cliente del ComboBox activo
-            // o buscamos directamente por coincidencia exacta en el listado global:
-            Customer matchedCustomer = SampleData.customers().stream()
-                    .filter(c -> c.toString().contains(customerCombo.getValue() != null ? customerCombo.getValue().getId() : ""))
+            String customerId = data.getValue().reservation().getCustomerId();
+            Customer matchedCustomer = ApplicationServices.CUSTOMER_REPOSITORY.findAll().stream()
+                    .filter(customer -> customer.getId().equals(customerId))
                     .findFirst()
                     .orElse(null);
 
-            if (matchedCustomer != null) {
-                return new SimpleStringProperty(matchedCustomer.toString());
-            } else if (customerCombo.getValue() != null) {
-                return new SimpleStringProperty(customerCombo.getValue().toString());
-            }
-            return new SimpleStringProperty("CUS-1002 - Daniel Rojas"); // Fallback seguro
+            return new SimpleStringProperty(
+                    matchedCustomer == null ? customerId : matchedCustomer.toString());
         });
 
         statusCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().reservation().getStatus()));
@@ -134,7 +126,7 @@ public class ReservationController {
 
                 clearFields();
             } else {
-                showAlert(Alert.AlertType.ERROR, "Payment Failed", "The credit card transaction was rejected.");
+                showAlert(Alert.AlertType.ERROR, "Payment Not Completed", result.paymentResult().message());
             }
 
         } catch (IllegalArgumentException | IllegalStateException ex) {
@@ -169,9 +161,7 @@ public class ReservationController {
     // Este método se encargará de refrescar los datos de la pantalla en vivo
     public void refreshData() {
         if (customerCombo != null) {
-            customerCombo.getItems().setAll(edu.rentcar.data.SampleData.customers());
-            // Si crearon el repositorio de clientes, jalamos de ahí:
-            // customerCombo.getItems().setAll(edu.rentcar.app.ApplicationServices.CUSTOMER_REPOSITORY.findAll());
+            customerCombo.getItems().setAll(ApplicationServices.CUSTOMER_REPOSITORY.findAll());
         }
         if (vehicleCombo != null) {
             vehicleCombo.getItems().setAll(edu.rentcar.data.SampleData.vehicles());
