@@ -1,10 +1,10 @@
 package edu.rentcar.app;
 
-import edu.rentcar.data.SampleData;
 import edu.rentcar.payment.PaymentApiAdapter;
 import edu.rentcar.payment.PaymentGateway;
 import edu.rentcar.payment.PaymentGatewayProxy;
 import edu.rentcar.payment.SampleDataCustomerVerificationService;
+import edu.rentcar.repository.InMemoryCustomerRepository;
 import edu.rentcar.repository.VehicleRepository;
 import edu.rentcar.reservation.InMemoryReservationRepository;
 import edu.rentcar.reservation.RentalCostCalculator;
@@ -18,6 +18,9 @@ import edu.rentcar.service.VehicleService;
  */
 public final class ApplicationServices {
 
+    public static final InMemoryCustomerRepository CUSTOMER_REPOSITORY =
+            new InMemoryCustomerRepository();
+
     private static final VehicleService VEHICLE_SERVICE =
             new VehicleService(new VehicleRepository());
 
@@ -27,7 +30,7 @@ public final class ApplicationServices {
     private static final PaymentGateway PAYMENT_GATEWAY =
             new PaymentGatewayProxy(
                     new PaymentApiAdapter("http://localhost:8080"),
-                    new SampleDataCustomerVerificationService(SampleData.customers())
+                    new SampleDataCustomerVerificationService(CUSTOMER_REPOSITORY::findAll)
             );
 
     private static final ReservationWorkflowFacade RESERVATION_WORKFLOW_FACADE =
@@ -48,6 +51,4 @@ public final class ApplicationServices {
         return RESERVATION_WORKFLOW_FACADE;
     }
 
-    public static final edu.rentcar.repository.InMemoryCustomerRepository CUSTOMER_REPOSITORY =
-            new edu.rentcar.repository.InMemoryCustomerRepository();
 }
