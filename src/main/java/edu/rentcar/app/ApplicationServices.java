@@ -38,15 +38,16 @@ public final class ApplicationServices {
                     PAYMENT_GATEWAY
             );
 
-
     private ApplicationServices() {}
 
     public static VehicleService vehicleService() {
         return VEHICLE_SERVICE;
     }
 
-
     public static ReservationWorkflowFacade reservationWorkflowFacade() {
         return RESERVATION_WORKFLOW_FACADE;
     }
+
+    public static final edu.rentcar.repository.InMemoryCustomerRepository CUSTOMER_REPOSITORY =
+            new edu.rentcar.repository.InMemoryCustomerRepository();
 }

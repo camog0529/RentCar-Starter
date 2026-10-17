@@ -28,4 +28,9 @@ public class Customer {
     public boolean isAuthorized() {
         return authorized;
     }
+
+    @Override
+    public String toString (){
+        return this.getId()+" - "+this.getFullName();
+    }
 }
